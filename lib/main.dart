@@ -98,7 +98,10 @@ class _KeypadWidgetState extends State<KeypadWidget> {
   Widget build(BuildContext context) {
     return Container(
       color: AppTheme.backgroundColor,
-      padding: const EdgeInsets.only(left: 16, right: 16),
+      padding: const EdgeInsets.only(
+        left: 16,
+        right: 16,
+      ),
       child: StaggeredGrid.count(
         crossAxisCount: 4,
         mainAxisSpacing: MediaQuery.of(context).size.width / 32,

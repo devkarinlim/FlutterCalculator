@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 extension StringUtils on String {
   String removeGroupSeparator() {
     return replaceAll(".", "");
@@ -17,6 +19,14 @@ extension StringUtils on String {
   }
 
   double formatToNumber() {
-    return 0;
+    double result = 0;
+    String preparedValue = prepareBeforeDoubleParse();
+    result = double.parse(preparedValue);
+    return result;
+  }
+
+  String prepareBeforeDoubleParse() {
+    replaceAll(".", "");
+    return replaceAll(",", ".");
   }
 }

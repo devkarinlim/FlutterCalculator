@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:calculator_flutter/Helper/string_utils.dart';
+import 'package:intl/intl.dart';
 
 class ResultProvider extends ChangeNotifier {
   String _resultValue = "123.456.789";
+  double firstInput = 0;
+  double secondInput = 0;
+  int resetCount = 0;
+  int equalTapCount = 0;
 
   String get resultValue => _resultValue;
 
@@ -30,7 +35,9 @@ class ResultProvider extends ChangeNotifier {
   }
 
   void percentOperation() {
-    setResultValue("%");
+    double result = resultValue.formatToNumber();
+    result /= 100;
+    setResultValue(_formatDecimalToString(result));
   }
 
   void divisionOperation() {
@@ -51,5 +58,15 @@ class ResultProvider extends ChangeNotifier {
 
   void equalOperation() {
     setResultValue(resultValue.removeGroupSeparator());
+  }
+
+  String _formatDecimalToString(double calcResult) {
+    if (calcResult == 0) {
+      return "0";
+    }
+    return calcResult.toStringAsExponential();
+    // var formatter = NumberFormat("#,##0.00", "ID");
+    // formatter.maximumFractionDigits = 10;
+    // return formatter.format(calcResult);
   }
 }
