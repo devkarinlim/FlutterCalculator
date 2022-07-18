@@ -1,5 +1,3 @@
-import 'package:intl/intl.dart';
-
 extension StringUtils on String {
   String removeGroupSeparator() {
     return replaceAll(".", "");
@@ -9,24 +7,36 @@ extension StringUtils on String {
     return replaceAll(",", "");
   }
 
+  String formatDecimalSeparator() {
+    return replaceAll(".", ",");
+  }
+
   String removeDecimalDigits() {
     List<String> strList = split(",");
-    if (strList.length > 0) {
+    if (strList.isNotEmpty) {
       return strList.first;
     } else {
       return this;
     }
   }
 
+  String removeNegationSign() {
+    return replaceAll("-", "");
+  }
+
   double formatToNumber() {
     double result = 0;
     String preparedValue = prepareBeforeDoubleParse();
-    result = double.parse(preparedValue);
+    try {
+      result = double.parse(preparedValue);
+    } catch (e) {
+      print(e.toString());
+    }
     return result;
   }
 
   String prepareBeforeDoubleParse() {
-    replaceAll(".", "");
-    return replaceAll(",", ".");
+    String newValue = replaceAll(".", "");
+    return newValue.replaceAll(",", ".");
   }
 }
