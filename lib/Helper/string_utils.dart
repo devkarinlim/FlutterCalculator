@@ -1,3 +1,5 @@
+import 'package:decimal/decimal.dart';
+
 extension StringUtils on String {
   String removeGroupSeparator() {
     return replaceAll(".", "");
@@ -13,11 +15,7 @@ extension StringUtils on String {
 
   String removeDecimalDigits() {
     List<String> strList = split(",");
-    if (strList.isNotEmpty) {
-      return strList.first;
-    } else {
-      return this;
-    }
+    return strList.first;
   }
 
   String removeNegationSign() {
@@ -28,7 +26,7 @@ extension StringUtils on String {
     double result = 0;
     String preparedValue = prepareBeforeDoubleParse();
     try {
-      result = double.parse(preparedValue);
+      result = Decimal.parse(preparedValue).toDouble();
     } catch (e) {
       print(e.toString());
     }

@@ -30,8 +30,6 @@ class CalculatorBody extends StatefulWidget {
   _CalculatorBodyState createState() => _CalculatorBodyState();
 }
 
-String resultValue = "123.456.789";
-
 class _CalculatorBodyState extends State<CalculatorBody> {
   @override
   Widget build(BuildContext context) {

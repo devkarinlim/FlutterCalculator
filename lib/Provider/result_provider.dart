@@ -4,13 +4,13 @@ import 'package:intl/intl.dart';
 import 'dart:math';
 
 class ResultProvider extends ChangeNotifier {
-  String _resultValue = "123.456,789";
+  String _resultValue = "0";
   String _resultCache = "0";
   double firstInput = 0;
   double secondInput = 0;
   int resetCount = 0;
   int equalTapCount = 0;
-  OperationType _operationType = OperationType.none;
+  OperationType operationType = OperationType.none;
   bool isNumberInput = false;
 
   String get resultValue => _resultValue;
@@ -21,16 +21,16 @@ class ResultProvider extends ChangeNotifier {
   }
 
   void inputNumber(String title) {
-    if (!_isAbleInput(_resultCache)) {
+    if (!isAbleInput(_resultCache)) {
       return;
     }
     if (equalTapCount > 0) {
-      _clearInput();
+      clearInput();
       if (title != ",") {
         _resultCache = title;
       }
     }
-    if (_operationType != OperationType.none && _resultCache == "0") {
+    if (operationType != OperationType.none && _resultCache == "0") {
       _resultValue = _resultCache;
     }
     if (resultValue == "0" && title != ",") {
@@ -55,15 +55,15 @@ class ResultProvider extends ChangeNotifier {
     //TODO: fix input number after equals operation, number still concat not replace
   }
 
-  void _clearInput() {
+  void clearInput() {
     firstInput = 0;
     secondInput = 0;
-    _operationType = OperationType.none;
+    operationType = OperationType.none;
     equalTapCount = 0;
     resetCount = 0;
   }
 
-  bool _isAbleInput(String resultValue) {
+  bool isAbleInput(String resultValue) {
     var result = false;
     var labelValue = resultValue.removeGroupSeparator();
     labelValue = labelValue.removeDecimalSeparator();
@@ -77,9 +77,9 @@ class ResultProvider extends ChangeNotifier {
   void resetValue() {
     setResultValue("0");
     if (resetCount == 1) {
-      _clearInput();
+      clearInput();
     } else {
-      if (_operationType != OperationType.none) {
+      if (operationType != OperationType.none) {
         secondInput = 0;
       }
       resetCount = 1;
@@ -132,14 +132,14 @@ class ResultProvider extends ChangeNotifier {
   }
 
   void equalOperation() {
-    if (_operationType == OperationType.none) {
+    if (operationType == OperationType.none) {
       equalTapCount = 0;
       return;
     }
     if (equalTapCount == 0) {
       secondInput = resultValue.formatToNumber();
     }
-    switch (_operationType) {
+    switch (operationType) {
       case OperationType.none:
         break;
       case OperationType.plus:
@@ -168,15 +168,29 @@ class ResultProvider extends ChangeNotifier {
     firstInput = resultValue.formatToNumber();
   }
 
+  void _setFirstInput(OperationType typeOperation) {
+    if (isNumberInput && operationType != OperationType.none) {
+      equalOperation();
+    }
+    if (operationType == OperationType.none) {
+      firstInput = _resultCache.formatToNumber();
+    }
+    operationType = typeOperation;
+    equalTapCount = 0;
+    _resultCache = "0";
+    resetCount = 0;
+    isNumberInput = false;
+  }
+
   String _formatDecimalToString(double calcResult) {
     if (calcResult == 0) {
       return "0";
     }
-    var formatter = NumberFormat.decimalPattern("ID");
-    formatter.minimumExponentDigits = 9;
-    formatter.maximumFractionDigits = 10;
+    // var formatter = NumberFormat.decimalPattern("ID");
+    // formatter.maximumFractionDigits = 14;
 
-    return formatter.format(calcResult);
+    // return formatter.format(calcResult);
+    return calcResult.toString().formatDecimalSeparator();
   }
 
   String _formatResultToDecimal(String resultValue) {
@@ -184,12 +198,37 @@ class ResultProvider extends ChangeNotifier {
       return resultValue;
     }
     var formatter = NumberFormat("#,##0.00", "ID");
-    formatter.maximumFractionDigits = 14;
+    formatter.maximumFractionDigits = 8;
     formatter.minimumFractionDigits = 0;
-    _resultCache = formatter.format(resultValue
-        .formatToNumber()); //TODO: fix method formatToNumber for exponent > 18
-    return _convertResultToExponentOfTen(
-        _resultCache); //TODO: format to exponent
+    var intDigitCount = resultValue.removeDecimalDigits();
+    if (!resultValue.contains("e")) {
+      var doubleVal = resultValue.formatToNumber();
+      if (intDigitCount.length < 19) {
+        _resultCache = formatter.format(doubleVal);
+      } else {
+        _resultCache = manualGroupFormatting(resultValue);
+      }
+      return _convertResultToExponentOfTen(_resultCache);
+    } else {
+      _resultCache = _convertExponentToExponent(resultValue);
+      return _resultCache;
+    }
+  }
+
+  String manualGroupFormatting(String resultValue) {
+    var strList = resultValue.split(',');
+    var intDigits = strList.first.split('').reversed.join();
+    var intFormattedValue = "";
+    for (var i = 0; i < intDigits.length; i++) {
+      intFormattedValue += intDigits[i];
+      if ((i + 1) % 3 == 0) {
+        if (i >= intDigits.length) {
+          continue;
+        }
+        intFormattedValue += ".";
+      }
+    }
+    return "${intFormattedValue.split('').reversed.join()},${strList.last}";
   }
 
   String _convertResultToExponentOfTen(String resultValueStr) {
@@ -202,31 +241,18 @@ class ResultProvider extends ChangeNotifier {
       }
     } else {
       if (absValue.removeDecimalSeparator().length > 9) {
-        result = _getNegativeExponentFormat(absValue);
+        // result = _getNegativeExponentFormat(absValue);
+        return resultValueStr;
       }
     }
     return result;
   }
 
-  void _setFirstInput(OperationType typeOperation) {
-    if (isNumberInput && _operationType != OperationType.none) {
-      equalOperation();
-    }
-    if (_operationType == OperationType.none) {
-      firstInput = _resultCache.formatToNumber();
-    }
-    _operationType = typeOperation;
-    equalTapCount = 0;
-    _resultCache = "0";
-    resetCount = 0;
-    isNumberInput = false;
-  }
-
   String _getPositiveExponentFormat(String digitStr) {
     var numValue = digitStr.formatToNumber();
     var nPow = digitStr.removeGroupSeparator().length - 1;
-    var divideByValue = pow(10, nPow);
-    var decimalValue = numValue / divideByValue;
+    var divideByValue = BigInt.from(10).pow(nPow);
+    var decimalValue = BigInt.from(numValue) / divideByValue;
     var formatter = NumberFormat("#,##0.00", "ID");
     formatter.minimumFractionDigits = 0;
     var decimalValueStr =
@@ -266,6 +292,18 @@ class ResultProvider extends ChangeNotifier {
     } else {
       return decimalValueStr;
     }
+  }
+
+  String _convertExponentToExponent(String resultValue) {
+    var newValue = resultValue.replaceAll("+", "");
+    if (newValue.contains("e-")) {
+      var strList = newValue.split("e-");
+      var decValue = strList.first;
+      var nPow = strList.last;
+      newValue =
+          "${decValue.formatToNumber().toStringAsFixed(2).formatDecimalSeparator()}e-$nPow";
+    }
+    return newValue;
   }
 }
 
