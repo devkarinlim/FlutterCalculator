@@ -10,6 +10,8 @@ void main() {
   runApp(const CalculatorApp());
 }
 
+var divideValue = 28;
+
 class CalculatorApp extends StatelessWidget {
   const CalculatorApp({Key? key}) : super(key: key);
 
@@ -100,201 +102,244 @@ class _KeypadWidgetState extends State<KeypadWidget> {
         left: 16,
         right: 16,
       ),
-      child: StaggeredGrid.count(
-        crossAxisCount: 4,
-        mainAxisSpacing: MediaQuery.of(context).size.width / 32,
-        crossAxisSpacing: MediaQuery.of(context).size.width / 32,
-        children: [
-          StaggeredGridTile.count(
-            crossAxisCellCount: 1,
-            mainAxisCellCount: 1,
-            child: KeyButton(
-                title: "AC",
-                titleColor: AppTheme.darkTintColor,
-                backgroundColor: AppTheme.lightGrey,
-                onTap: () => resetButtonTap(context),
-                isTitleIcon: false),
-          ),
-          StaggeredGridTile.count(
+      child: Consumer<ResultProvider>(
+        builder: (context, resultProvider, child) => StaggeredGrid.count(
+          crossAxisCount: 4,
+          mainAxisSpacing: MediaQuery.of(context).size.width / 32,
+          crossAxisSpacing: MediaQuery.of(context).size.width / 32,
+          children: [
+            StaggeredGridTile.count(
               crossAxisCellCount: 1,
               mainAxisCellCount: 1,
               child: KeyButton(
+                  title: "AC",
+                  titleColor: AppTheme.darkTintColor,
+                  backgroundColor: AppTheme.lightGrey,
+                  padding: MediaQuery.of(context).size.width / divideValue,
+                  onTap: () => resetButtonTap(context),
+                  isTitleIcon: false),
+            ),
+            StaggeredGridTile.count(
+                crossAxisCellCount: 1,
+                mainAxisCellCount: 1,
+                child: KeyButton(
                   title: "+/-",
                   titleColor: AppTheme.darkTintColor,
                   backgroundColor: AppTheme.lightGrey,
+                  padding: MediaQuery.of(context).size.width / divideValue,
                   onTap: () => negationTap(context),
-                  isTitleIcon: false)),
-          StaggeredGridTile.count(
-            crossAxisCellCount: 1,
-            mainAxisCellCount: 1,
-            child: KeyButton(
-                title: "%",
-                titleColor: AppTheme.darkTintColor,
-                backgroundColor: AppTheme.lightGrey,
-                onTap: () => percentageTap(context),
-                isTitleIcon: false),
-          ),
-          StaggeredGridTile.count(
-            crossAxisCellCount: 1,
-            mainAxisCellCount: 1,
-            child: KeyButton(
+                  isTitleIcon: true,
+                  assetPath: "assets/plus_minus.svg",
+                )),
+            StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: 1,
+              child: KeyButton(
+                  title: "%",
+                  titleColor: AppTheme.darkTintColor,
+                  backgroundColor: AppTheme.lightGrey,
+                  padding: MediaQuery.of(context).size.width / divideValue,
+                  onTap: () => percentageTap(context),
+                  isTitleIcon: false),
+            ),
+            StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: 1,
+              child: KeyButton(
                 title: "/",
-                titleColor: AppTheme.lightTintColor,
-                backgroundColor: AppTheme.orange,
+                titleColor: getColor(resultProvider, OperationType.division,
+                    AppTheme.lightTintColor, AppTheme.orange),
+                backgroundColor: getColor(
+                    resultProvider,
+                    OperationType.division,
+                    AppTheme.orange,
+                    AppTheme.lightTintColor),
+                padding: MediaQuery.of(context).size.width / divideValue,
                 onTap: () => divisionTap(context),
-                isTitleIcon: false),
-          ),
-          StaggeredGridTile.count(
-            crossAxisCellCount: 1,
-            mainAxisCellCount: 1,
-            child: KeyButton(
-                title: "7",
-                titleColor: AppTheme.lightTintColor,
-                backgroundColor: AppTheme.darkGrey,
-                onTap: () => numberButtonTap(context, "7"),
-                isTitleIcon: false),
-          ),
-          StaggeredGridTile.count(
-            crossAxisCellCount: 1,
-            mainAxisCellCount: 1,
-            child: KeyButton(
-                title: "8",
-                titleColor: AppTheme.lightTintColor,
-                backgroundColor: AppTheme.darkGrey,
-                onTap: () => numberButtonTap(context, "8"),
-                isTitleIcon: false),
-          ),
-          StaggeredGridTile.count(
-            crossAxisCellCount: 1,
-            mainAxisCellCount: 1,
-            child: KeyButton(
-                title: "9",
-                titleColor: AppTheme.lightTintColor,
-                backgroundColor: AppTheme.darkGrey,
-                onTap: () => numberButtonTap(context, "9"),
-                isTitleIcon: false),
-          ),
-          StaggeredGridTile.count(
-            crossAxisCellCount: 1,
-            mainAxisCellCount: 1,
-            child: KeyButton(
+                isTitleIcon: true,
+                assetPath: "assets/division.svg",
+              ),
+            ),
+            StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: 1,
+              child: KeyButton(
+                  title: "7",
+                  titleColor: AppTheme.lightTintColor,
+                  backgroundColor: AppTheme.darkGrey,
+                  padding: MediaQuery.of(context).size.width / divideValue,
+                  onTap: () => numberButtonTap(context, "7"),
+                  isTitleIcon: false),
+            ),
+            StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: 1,
+              child: KeyButton(
+                  title: "8",
+                  titleColor: AppTheme.lightTintColor,
+                  backgroundColor: AppTheme.darkGrey,
+                  padding: MediaQuery.of(context).size.width / divideValue,
+                  onTap: () => numberButtonTap(context, "8"),
+                  isTitleIcon: false),
+            ),
+            StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: 1,
+              child: KeyButton(
+                  title: "9",
+                  titleColor: AppTheme.lightTintColor,
+                  backgroundColor: AppTheme.darkGrey,
+                  padding: MediaQuery.of(context).size.width / divideValue,
+                  onTap: () => numberButtonTap(context, "9"),
+                  isTitleIcon: false),
+            ),
+            StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: 1,
+              child: KeyButton(
                 title: "x",
-                titleColor: AppTheme.lightTintColor,
-                backgroundColor: AppTheme.orange,
+                titleColor: getColor(resultProvider, OperationType.multiple,
+                    AppTheme.lightTintColor, AppTheme.orange),
+                backgroundColor: getColor(
+                    resultProvider,
+                    OperationType.multiple,
+                    AppTheme.orange,
+                    AppTheme.lightTintColor),
+                padding: MediaQuery.of(context).size.width / divideValue,
                 onTap: () => multipleTap(context),
-                isTitleIcon: false),
-          ),
-          StaggeredGridTile.count(
-            crossAxisCellCount: 1,
-            mainAxisCellCount: 1,
-            child: KeyButton(
-                title: "4",
-                titleColor: AppTheme.lightTintColor,
-                backgroundColor: AppTheme.darkGrey,
-                onTap: () => numberButtonTap(context, "4"),
-                isTitleIcon: false),
-          ),
-          StaggeredGridTile.count(
-            crossAxisCellCount: 1,
-            mainAxisCellCount: 1,
-            child: KeyButton(
-                title: "5",
-                titleColor: AppTheme.lightTintColor,
-                backgroundColor: AppTheme.darkGrey,
-                onTap: () => numberButtonTap(context, "5"),
-                isTitleIcon: false),
-          ),
-          StaggeredGridTile.count(
-            crossAxisCellCount: 1,
-            mainAxisCellCount: 1,
-            child: KeyButton(
-                title: "6",
-                titleColor: AppTheme.lightTintColor,
-                backgroundColor: AppTheme.darkGrey,
-                onTap: () => numberButtonTap(context, "6"),
-                isTitleIcon: false),
-          ),
-          StaggeredGridTile.count(
-            crossAxisCellCount: 1,
-            mainAxisCellCount: 1,
-            child: KeyButton(
-                title: "-",
-                titleColor: AppTheme.lightTintColor,
-                backgroundColor: AppTheme.orange,
-                onTap: () => minusTap(context),
-                isTitleIcon: false),
-          ),
-          StaggeredGridTile.count(
-            crossAxisCellCount: 1,
-            mainAxisCellCount: 1,
-            child: KeyButton(
-                title: "1",
-                titleColor: AppTheme.lightTintColor,
-                backgroundColor: AppTheme.darkGrey,
-                onTap: () => numberButtonTap(context, "1"),
-                isTitleIcon: false),
-          ),
-          StaggeredGridTile.count(
-            crossAxisCellCount: 1,
-            mainAxisCellCount: 1,
-            child: KeyButton(
-                title: "2",
-                titleColor: AppTheme.lightTintColor,
-                backgroundColor: AppTheme.darkGrey,
-                onTap: () => numberButtonTap(context, "2"),
-                isTitleIcon: false),
-          ),
-          StaggeredGridTile.count(
-            crossAxisCellCount: 1,
-            mainAxisCellCount: 1,
-            child: KeyButton(
-                title: "3",
-                titleColor: AppTheme.lightTintColor,
-                backgroundColor: AppTheme.darkGrey,
-                onTap: () => numberButtonTap(context, "3"),
-                isTitleIcon: false),
-          ),
-          StaggeredGridTile.count(
-            crossAxisCellCount: 1,
-            mainAxisCellCount: 1,
-            child: KeyButton(
+                isTitleIcon: true,
+                assetPath: "assets/multiple.svg",
+              ),
+            ),
+            StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: 1,
+              child: KeyButton(
+                  title: "4",
+                  titleColor: AppTheme.lightTintColor,
+                  backgroundColor: AppTheme.darkGrey,
+                  padding: MediaQuery.of(context).size.width / divideValue,
+                  onTap: () => numberButtonTap(context, "4"),
+                  isTitleIcon: false),
+            ),
+            StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: 1,
+              child: KeyButton(
+                  title: "5",
+                  titleColor: AppTheme.lightTintColor,
+                  backgroundColor: AppTheme.darkGrey,
+                  padding: MediaQuery.of(context).size.width / divideValue,
+                  onTap: () => numberButtonTap(context, "5"),
+                  isTitleIcon: false),
+            ),
+            StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: 1,
+              child: KeyButton(
+                  title: "6",
+                  titleColor: AppTheme.lightTintColor,
+                  backgroundColor: AppTheme.darkGrey,
+                  padding: MediaQuery.of(context).size.width / divideValue,
+                  onTap: () => numberButtonTap(context, "6"),
+                  isTitleIcon: false),
+            ),
+            StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: 1,
+              child: KeyButton(
+                  title: "-",
+                  titleColor: getColor(resultProvider, OperationType.minus,
+                      AppTheme.lightTintColor, AppTheme.orange),
+                  backgroundColor: getColor(resultProvider, OperationType.minus,
+                      AppTheme.orange, AppTheme.lightTintColor),
+                  padding: MediaQuery.of(context).size.width / divideValue,
+                  onTap: () => minusTap(context),
+                  isTitleIcon: false),
+            ),
+            StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: 1,
+              child: KeyButton(
+                  title: "1",
+                  titleColor: AppTheme.lightTintColor,
+                  backgroundColor: AppTheme.darkGrey,
+                  padding: MediaQuery.of(context).size.width / divideValue,
+                  onTap: () => numberButtonTap(context, "1"),
+                  isTitleIcon: false),
+            ),
+            StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: 1,
+              child: KeyButton(
+                  title: "2",
+                  titleColor: AppTheme.lightTintColor,
+                  backgroundColor: AppTheme.darkGrey,
+                  padding: MediaQuery.of(context).size.width / divideValue,
+                  onTap: () => numberButtonTap(context, "2"),
+                  isTitleIcon: false),
+            ),
+            StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: 1,
+              child: KeyButton(
+                  title: "3",
+                  titleColor: AppTheme.lightTintColor,
+                  backgroundColor: AppTheme.darkGrey,
+                  padding: MediaQuery.of(context).size.width / divideValue,
+                  onTap: () => numberButtonTap(context, "3"),
+                  isTitleIcon: false),
+            ),
+            StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: 1,
+              child: KeyButton(
                 title: "+",
-                titleColor: AppTheme.lightTintColor,
-                backgroundColor: AppTheme.orange,
+                titleColor: getColor(resultProvider, OperationType.plus,
+                    AppTheme.lightTintColor, AppTheme.orange),
+                backgroundColor: getColor(resultProvider, OperationType.plus,
+                    AppTheme.orange, AppTheme.lightTintColor),
+                padding: MediaQuery.of(context).size.width / divideValue,
                 onTap: () => plusTap(context),
-                isTitleIcon: false),
-          ),
-          StaggeredGridTile.count(
-            crossAxisCellCount: 2,
-            mainAxisCellCount: 1,
-            child: KeyButton(
-                title: "0",
-                titleColor: AppTheme.lightTintColor,
-                backgroundColor: AppTheme.darkGrey,
-                onTap: () => numberButtonTap(context, "0"),
-                isTitleIcon: false),
-          ),
-          StaggeredGridTile.count(
-            crossAxisCellCount: 1,
-            mainAxisCellCount: 1,
-            child: KeyButton(
-                title: ",",
-                titleColor: AppTheme.lightTintColor,
-                backgroundColor: AppTheme.darkGrey,
-                onTap: () => numberButtonTap(context, ","),
-                isTitleIcon: false),
-          ),
-          StaggeredGridTile.count(
-            crossAxisCellCount: 1,
-            mainAxisCellCount: 1,
-            child: KeyButton(
-                title: "=",
-                titleColor: AppTheme.lightTintColor,
-                backgroundColor: AppTheme.orange,
-                onTap: () => equalTap(context),
-                isTitleIcon: false),
-          ),
-        ],
+                isTitleIcon: true,
+                assetPath: "assets/plus.svg",
+              ),
+            ),
+            StaggeredGridTile.count(
+              crossAxisCellCount: 2,
+              mainAxisCellCount: 1,
+              child: KeyButton(
+                  title: "0",
+                  titleColor: AppTheme.lightTintColor,
+                  backgroundColor: AppTheme.darkGrey,
+                  padding: MediaQuery.of(context).size.width / divideValue,
+                  onTap: () => numberButtonTap(context, "0"),
+                  isTitleIcon: false),
+            ),
+            StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: 1,
+              child: KeyButton(
+                  title: ",",
+                  titleColor: AppTheme.lightTintColor,
+                  backgroundColor: AppTheme.darkGrey,
+                  padding: MediaQuery.of(context).size.width / divideValue,
+                  onTap: () => numberButtonTap(context, ","),
+                  isTitleIcon: false),
+            ),
+            StaggeredGridTile.count(
+              crossAxisCellCount: 1,
+              mainAxisCellCount: 1,
+              child: KeyButton(
+                  title: "=",
+                  titleColor: AppTheme.lightTintColor,
+                  backgroundColor: AppTheme.orange,
+                  padding: MediaQuery.of(context).size.width / divideValue,
+                  onTap: () => equalTap(context),
+                  isTitleIcon: false),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -334,4 +379,14 @@ void equalTap(BuildContext context) {
 
 void numberButtonTap(BuildContext context, String title) {
   Provider.of<ResultProvider>(context, listen: false).inputNumber(title);
+}
+
+Color getColor(ResultProvider provider, OperationType operationType,
+    Color inactiveColor, Color activeColor) {
+  if (provider.operationType == operationType &&
+      !provider.isNumberInput &&
+      provider.equalTapCount == 0) {
+    return activeColor;
+  }
+  return inactiveColor;
 }

@@ -39,6 +39,7 @@ dependencies:
   provider: ^6.0.3
   intl: ^0.17.0
   decimal: ^2.2.0
+  flutter_svg: ^1.1.1+1
   
 
 dev_dependencies:
@@ -68,7 +69,10 @@ flutter:
       fonts: 
       - asset: fonts/SF-Pro-Text-Thin.otf
   assets:
-    - assets/multiple.png
+    - assets/multiple.svg
+    - assets/division.svg
+    - assets/plus.svg
+    - assets/plus_minus.svg
         
 
   # The following line ensures that the Material Icons font is

@@ -112,23 +112,23 @@ class ResultProvider extends ChangeNotifier {
   }
 
   void divisionOperation() {
-    //TODO: set button state and styling
     _setFirstInput(OperationType.division);
+    notifyListeners();
   }
 
   void multipleOperation() {
-    //TODO: set button state and styling
     _setFirstInput(OperationType.multiple);
+    notifyListeners();
   }
 
   void minusOperation() {
-    //TODO: set button state and styling
     _setFirstInput(OperationType.minus);
+    notifyListeners();
   }
 
   void plusOperation() {
-    //TODO: set button state and styling
     _setFirstInput(OperationType.plus);
+    notifyListeners();
   }
 
   void equalOperation() {
@@ -186,10 +186,6 @@ class ResultProvider extends ChangeNotifier {
     if (calcResult == 0) {
       return "0";
     }
-    // var formatter = NumberFormat.decimalPattern("ID");
-    // formatter.maximumFractionDigits = 14;
-
-    // return formatter.format(calcResult);
     return calcResult.toString().formatDecimalSeparator();
   }
 

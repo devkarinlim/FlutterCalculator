@@ -1,13 +1,15 @@
 import 'package:calculator_flutter/Theme/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class KeyButton extends StatefulWidget {
   final String title;
-  final IconData? icon;
   final Color titleColor;
   final Color backgroundColor;
   final Function() onTap;
   final bool isTitleIcon;
+  final double padding;
+  final String? assetPath;
 
   const KeyButton(
       {Key? key,
@@ -16,7 +18,8 @@ class KeyButton extends StatefulWidget {
       required this.backgroundColor,
       required this.onTap,
       required this.isTitleIcon,
-      this.icon})
+      required this.padding,
+      this.assetPath})
       : super(key: key);
 
   @override
@@ -27,9 +30,11 @@ class _KeyButtonState extends State<KeyButton> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: widget.onTap,
+      onTap: (() => {widget.onTap()}),
       child: Container(
-        padding: const EdgeInsets.all(15),
+        padding: widget.isTitleIcon
+            ? EdgeInsets.all(widget.padding * 2)
+            : EdgeInsets.all(widget.padding),
         decoration: BoxDecoration(
             color: widget.backgroundColor,
             borderRadius: BorderRadius.circular(100)),
@@ -42,10 +47,8 @@ class _KeyButtonState extends State<KeyButton> {
                         fontWeight: AppTheme.buttonTitleWeight,
                         fontFamily: AppTheme.buttonFontFamily),
                   )
-                : Icon(
-                    widget.icon,
-                    color: widget.titleColor,
-                  )),
+                : SvgPicture.asset(widget.assetPath!,
+                    color: widget.titleColor)),
       ),
     );
   }
